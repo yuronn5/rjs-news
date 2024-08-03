@@ -6,3 +6,8 @@
   font-family: "Inter", sans-serif;
   text-decoration: none;
 }
+
+.container {
+  min-height: 100vh;
+  padding: 24px;
+}
