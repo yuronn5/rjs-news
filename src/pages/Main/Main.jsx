@@ -1,10 +1,11 @@
 import React from "react";
 import styles from "./styles.module.css";
+import NewsBanner from "../../components/NewsBanner/NewsBanner";
 
 const Main = () => {
   return (
     <main className={styles.main}>
-      <h1>Main</h1>
+      <NewsBanner />
     </main>
   );
 };
