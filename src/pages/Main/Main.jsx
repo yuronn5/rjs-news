@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./styles.module.css";
 import NewsBanner from "../../components/NewsBanner/NewsBanner";
 import { getCategories, getNews } from "../../api/apiNews";
-import { useState } from "react";
 import NewsList from "../../components/NewsList/NewsList";
 import Pagination from "../../components/Pagination/Pagination";
 import Categories from "../../components/Categories/Categories";
@@ -10,20 +9,15 @@ import Search from "../../components/Search/Search";
 import { useDebounce } from "../../helpers/hooks/useDebounce";
 import { PAGE_SIZE, TOTAL_PAGES } from "../../constants/constants";
 import { useFetch } from "../../helpers/hooks/useFetch";
+import { useFilters } from "../../helpers/hooks/useFilters";
 
 const Main = () => {
-  const [filters, setFilters] = useState({
+  const { filters, changeFilter } = useFilters({
     page_number: 1,
     page_size: PAGE_SIZE,
     category: null,
     keywords: "",
   });
-
-  const changeFilter = (key, value) => {
-    setFilters((prev) => {
-      return { ...prev, [key]: value };
-    });
-  };
 
   const debouncedKeywords = useDebounce(filters.keywords, 1500);
 
