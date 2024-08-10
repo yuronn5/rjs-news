@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./styles.module.css";
 import NewsBanner from "../../components/NewsBanner/NewsBanner";
 import { getCategories, getNews } from "../../api/apiNews";
 import { useState } from "react";
 import NewsList from "../../components/NewsList/NewsList";
-import Skeleton from "../../components/Skeleton/Skeleton";
 import Pagination from "../../components/Pagination/Pagination";
 import Categories from "../../components/Categories/Categories";
 import Search from "../../components/Search/Search";
@@ -13,36 +12,42 @@ import { PAGE_SIZE, TOTAL_PAGES } from "../../constants/constants";
 import { useFetch } from "../../helpers/hooks/useFetch";
 
 const Main = () => {
-  const [keywords, setKeywords] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const debouncedKeywords = useDebounce(keywords, 1500);
-
-  const { data, error, isLoading } = useFetch(getNews, {
-    page_number: currentPage,
+  const [filters, setFilters] = useState({
+    page_number: 1,
     page_size: PAGE_SIZE,
-    category: selectedCategory === "All" ? null : selectedCategory,
+    category: null,
+    keywords: "",
+  });
+
+  const changeFilter = (key, value) => {
+    setFilters((prev) => {
+      return { ...prev, [key]: value };
+    });
+  };
+
+  const debouncedKeywords = useDebounce(filters.keywords, 1500);
+
+  const { data, isLoading } = useFetch(getNews, {
+    ...filters,
     keywords: debouncedKeywords,
   });
 
   const { data: dataCategories } = useFetch(getCategories);
 
   const handleNextPage = () => {
-    if (currentPage < TOTAL_PAGES) {
-      setCurrentPage(currentPage + 1);
+    if (filters.page_number < TOTAL_PAGES) {
+      changeFilter("page_number", filters.page_number + 1);
     }
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+    if (filters.page_number > 1) {
+      changeFilter("page_number", filters.page_number - 1);
     }
   };
 
   const handlePageClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    changeFilter("page_number", pageNumber);
   };
 
   return (
@@ -50,12 +55,15 @@ const Main = () => {
       {dataCategories ? (
         <Categories
           categories={dataCategories.categories}
-          setSelectedCategory={setSelectedCategory}
-          selectedCategory={selectedCategory}
+          setSelectedCategory={(category) => changeFilter("category", category)}
+          selectedCategory={filters.category}
         />
       ) : null}
 
-      <Search keywords={keywords} setKeywords={setKeywords} />
+      <Search
+        keywords={filters.keywords}
+        setKeywords={(keywords) => changeFilter("keywords", keywords)}
+      />
 
       <NewsBanner
         isLoading={isLoading}
@@ -63,8 +71,7 @@ const Main = () => {
       />
 
       <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        currentPage={filters.page_number}
         totalPages={TOTAL_PAGES}
         handleNextPage={handleNextPage}
         handlePrevPage={handlePrevPage}
@@ -74,8 +81,7 @@ const Main = () => {
       <NewsList isLoading={isLoading} news={data?.news} />
 
       <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        currentPage={filters.page_number}
         totalPages={TOTAL_PAGES}
         handleNextPage={handleNextPage}
         handlePrevPage={handlePrevPage}
