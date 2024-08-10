@@ -81,11 +81,7 @@ const Main = () => {
 
       <Search keywords={keywords} setKeywords={setKeywords} />
 
-      {news.length > 0 && !isLoading ? (
-        <NewsBanner item={news[0]} />
-      ) : (
-        <Skeleton count={1} type="banner" />
-      )}
+      <NewsBanner isLoading={isLoading} item={news.length > 0 && news[0]} />
 
       <Pagination
         currentPage={currentPage}
@@ -95,11 +91,8 @@ const Main = () => {
         handlePrevPage={handlePrevPage}
         handlePageClick={handlePageClick}
       />
-      {!isLoading ? (
-        <NewsList news={news} />
-      ) : (
-        <Skeleton count={10} type="item" />
-      )}
+
+      <NewsList isLoading={isLoading} news={news} />
 
       <Pagination
         currentPage={currentPage}
