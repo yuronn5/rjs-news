@@ -10,50 +10,24 @@ import Categories from "../../components/Categories/Categories";
 import Search from "../../components/Search/Search";
 import { useDebounce } from "../../helpers/hooks/useDebounce";
 import { PAGE_SIZE, TOTAL_PAGES } from "../../constants/constants";
+import { useFetch } from "../../helpers/hooks/useFetch";
 
 const Main = () => {
-  const [news, setNews] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [keywords, setKeywords] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [isLoading, setIsLoading] = useState(true);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const debouncedKeywords = useDebounce(keywords, 1500);
 
-  const fetchNews = async (currentPage) => {
-    try {
-      setIsLoading(true);
-      const response = await getNews({
-        page_number: currentPage,
-        page_size: PAGE_SIZE,
-        category: selectedCategory === "All" ? null : selectedCategory,
-        keywords: debouncedKeywords,
-      });
-      setNews(response.news);
+  const { data, error, isLoading } = useFetch(getNews, {
+    page_number: currentPage,
+    page_size: PAGE_SIZE,
+    category: selectedCategory === "All" ? null : selectedCategory,
+    keywords: debouncedKeywords,
+  });
 
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await getCategories();
-      setCategories(["All", ...response.categories]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchNews(currentPage);
-  }, [currentPage, selectedCategory, debouncedKeywords]);
+  const { data: dataCategories } = useFetch(getCategories);
 
   const handleNextPage = () => {
     if (currentPage < TOTAL_PAGES) {
@@ -73,15 +47,20 @@ const Main = () => {
 
   return (
     <main className={styles.main}>
-      <Categories
-        categories={categories}
-        setSelectedCategory={setSelectedCategory}
-        selectedCategory={selectedCategory}
-      />
+      {dataCategories ? (
+        <Categories
+          categories={dataCategories.categories}
+          setSelectedCategory={setSelectedCategory}
+          selectedCategory={selectedCategory}
+        />
+      ) : null}
 
       <Search keywords={keywords} setKeywords={setKeywords} />
 
-      <NewsBanner isLoading={isLoading} item={news.length > 0 && news[0]} />
+      <NewsBanner
+        isLoading={isLoading}
+        item={data && data.news && data.news[0]}
+      />
 
       <Pagination
         currentPage={currentPage}
@@ -92,7 +71,7 @@ const Main = () => {
         handlePageClick={handlePageClick}
       />
 
-      <NewsList isLoading={isLoading} news={news} />
+      <NewsList isLoading={isLoading} news={data?.news} />
 
       <Pagination
         currentPage={currentPage}
