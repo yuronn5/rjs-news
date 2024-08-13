@@ -25,7 +25,7 @@ const Main = () => {
 
   return (
     <main className={styles.main}>
-      <LatestNews banners={data && data.news} isLoading={isLoading} />
+      <LatestNews />
 
       <NewsByFilters
         filters={filters}
