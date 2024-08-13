@@ -1,25 +1,11 @@
 import React from "react";
 import styles from "./styles.module.css";
-import Categories from "../Categories/Categories";
-import Search from "../Search/Search";
 import Pagination from "../Pagination/Pagination";
 import NewsList from "../NewsList/NewsList";
-import withSkeleton from "../../helpers/hocs/withSkeleton";
-import { getCategories, getNews } from "../../api/apiNews";
-import { useFilters } from "../../helpers/hooks/useFilters";
 import { TOTAL_PAGES } from "../../constants/constants";
-import { useFetch } from "../../helpers/hooks/useFetch";
-import { useDebounce } from "../../helpers/hooks/useDebounce";
-import { PAGE_SIZE } from "../../constants/constants";
-import LatestNews from "../LatestNews/LatestNews";
-import BannersList from "../BannersList/BannersList";
-import NewsBanner from "../NewsBanner/NewsBanner";
-import { formatTimeAgo } from "../../helpers/formatTimeAgo";
-// import
+import NewsFilters from "../NewsFilters/NewsFilters";
 
-const NewsByFilters = ({filters, changeFilter, isLoading, news}) => {
-  const { data: dataCategories } = useFetch(getCategories);
-
+const NewsByFilters = ({ filters, changeFilter, isLoading, news }) => {
   const handleNextPage = () => {
     if (filters.page_number < TOTAL_PAGES) {
       changeFilter("page_number", filters.page_number + 1);
@@ -38,19 +24,8 @@ const NewsByFilters = ({filters, changeFilter, isLoading, news}) => {
 
   return (
     <section className={styles.section}>
-        {dataCategories ? (
-        <Categories
-          categories={dataCategories.categories}
-          setSelectedCategory={(category) => changeFilter("category", category)}
-          selectedCategory={filters.category}
-        />
-      ) : null}
-
-      <Search
-        keywords={filters.keywords}
-        setKeywords={(keywords) => changeFilter("keywords", keywords)}
-      />
-
+      <NewsFilters changeFilter={changeFilter} filters={filters} />
+      
       <Pagination
         currentPage={filters.page_number}
         totalPages={TOTAL_PAGES}
