@@ -4,8 +4,27 @@ import Pagination from "../Pagination/Pagination";
 import NewsList from "../NewsList/NewsList";
 import { TOTAL_PAGES } from "../../constants/constants";
 import NewsFilters from "../NewsFilters/NewsFilters";
+import { useFetch } from "../../helpers/hooks/useFetch";
+import { getNews } from "../../api/apiNews";
+import { useDebounce } from "../../helpers/hooks/useDebounce";
+import { useFilters } from "../../helpers/hooks/useFilters";
+import { PAGE_SIZE } from "../../constants/constants";
 
-const NewsByFilters = ({ filters, changeFilter, isLoading, news }) => {
+const NewsByFilters = () => {
+  const { filters, changeFilter } = useFilters({
+    page_number: 1,
+    page_size: PAGE_SIZE,
+    category: null,
+    keywords: "",
+  });
+
+  const debouncedKeywords = useDebounce(filters.keywords, 1500);
+
+  const { data, isLoading } = useFetch(getNews, {
+    ...filters,
+    keywords: debouncedKeywords,
+  });
+
   const handleNextPage = () => {
     if (filters.page_number < TOTAL_PAGES) {
       changeFilter("page_number", filters.page_number + 1);
@@ -34,7 +53,7 @@ const NewsByFilters = ({ filters, changeFilter, isLoading, news }) => {
         handlePageClick={handlePageClick}
       />
 
-      <NewsList isLoading={isLoading} news={news} />
+      <NewsList isLoading={isLoading} news={data?.news} />
 
       <Pagination
         currentPage={filters.page_number}
