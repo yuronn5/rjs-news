@@ -10,6 +10,7 @@ import { useDebounce } from "../../helpers/hooks/useDebounce";
 import { PAGE_SIZE, TOTAL_PAGES } from "../../constants/constants";
 import { useFetch } from "../../helpers/hooks/useFetch";
 import { useFilters } from "../../helpers/hooks/useFilters";
+import LatestNews from "../../components/LatestNews/LatestNews";
 
 const Main = () => {
   const { filters, changeFilter } = useFilters({
@@ -46,6 +47,8 @@ const Main = () => {
 
   return (
     <main className={styles.main}>
+      <LatestNews banners={data && data.news } isLoading={isLoading} />
+
       {dataCategories ? (
         <Categories
           categories={dataCategories.categories}
@@ -59,10 +62,10 @@ const Main = () => {
         setKeywords={(keywords) => changeFilter("keywords", keywords)}
       />
 
-      <NewsBanner
+      {/* <NewsBanner
         isLoading={isLoading}
         item={data && data.news && data.news[0]}
-      />
+      /> */}
 
       <Pagination
         currentPage={filters.page_number}
