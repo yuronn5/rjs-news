@@ -10,7 +10,7 @@ interface UseFetchResults<T> {
   error: Error | null;
 }
 
-export const useFetch = <P, T>(fetchFunction: FetchFunction<P, T>, params?: P) => {
+export const useFetch = <P, T>(fetchFunction: FetchFunction<P, T>, params?: P): UseFetchResults<T> => {
   const [data, setData] = useState <T | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
