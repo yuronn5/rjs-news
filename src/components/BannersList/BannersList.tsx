@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./styles.module.css";
 import withSkeleton from "../../helpers/hocs/withSkeleton";
 import NewsBanner from "../NewsBanner/NewsBanner";
