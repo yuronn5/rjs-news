@@ -4,6 +4,7 @@ interface Props {
   top?: boolean;
   bottom?: boolean;
   children: React.ReactNode;
+  isDark: boolean;
 
   totalPages: number;
   currentPage: number;
@@ -12,12 +13,18 @@ interface Props {
   handleNextPage: () => void;
 }
 
-const PaginationWrapper = ({ top, bottom, children, ...paginationProps }: Props) => {
+const PaginationWrapper = ({
+  top,
+  bottom,
+  children,
+  isDark,
+  ...paginationProps
+}: Props) => {
   return (
     <>
-      {top && <Pagination {...paginationProps} />}
+      {top && <Pagination isDark={isDark} {...paginationProps} />}
       {children}
-      {bottom && <Pagination {...paginationProps} />}
+      {bottom && <Pagination isDark={isDark} {...paginationProps} />}
     </>
   );
 };

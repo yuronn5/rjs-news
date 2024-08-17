@@ -9,7 +9,11 @@ import NewsList from "../NewsList/NewsList";
 import PaginationWrapper from "../PaginationWrapper/PaginationWrapper";
 import styles from "./styles.module.css";
 
-const NewsByFilters = () => {
+interface Props {
+  isDark: boolean;
+}
+
+const NewsByFilters = ({isDark}: Props) => {
   const { filters, changeFilter } = useFilters({
     page_number: 1,
     page_size: PAGE_SIZE,
@@ -42,16 +46,17 @@ const NewsByFilters = () => {
 
   return (
     <section className={styles.section}>
-      <NewsFilters changeFilter={changeFilter} filters={filters} />
+      <NewsFilters isDark={isDark} changeFilter={changeFilter} filters={filters} />
 
       <PaginationWrapper
         top
         bottom
-        handlePreviousPage={handlePreviousPage}
+        handlePrevPage={handlePreviousPage}
         handleNextPage={handleNextPage}
         handlePageClick={handlePageClick}
         totalPages={TOTAL_PAGES}
         currentPage={filters.page_number}
+        isDark={isDark}
       >
         <NewsList isLoading={isLoading} news={data?.news} />
       </PaginationWrapper>

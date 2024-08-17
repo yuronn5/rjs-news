@@ -6,11 +6,12 @@ interface Props {
   handlePageClick: (page: number) => void;
   handlePrevPage: () => void;
   handleNextPage: () => void;
+  isDark: boolean;
 }
 
-const Pagination = ({ totalPages, handlePageClick, handlePrevPage, handleNextPage, currentPage  }: Props) => {
+const Pagination = ({ totalPages, handlePageClick, handlePrevPage, handleNextPage, currentPage, isDark  }: Props) => {
   return (
-    <div className={styles.pagination}>
+    <div className={`${styles.pagination} ${isDark ? styles.dark : styles.light}`}>
       <button disabled={currentPage <= 1} onClick={handlePrevPage} className={styles.arrow}>{"<"}</button>
       <div className={styles.list}>
         {[...Array(totalPages)].map((_, index) => {
