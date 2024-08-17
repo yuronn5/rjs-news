@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./styles.module.css";
 import BannersList from "../BannersList/BannersList";
 import { useFetch } from "../../helpers/hooks/useFetch";

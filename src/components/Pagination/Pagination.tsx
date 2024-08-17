@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./styles.module.css";
 
 const Pagination = ({ totalPages, handlePageClick, handlePrevPage, handleNextPage, currentPage  }) => {

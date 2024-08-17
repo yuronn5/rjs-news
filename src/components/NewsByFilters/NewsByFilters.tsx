@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./styles.module.css";
 import NewsList from "../NewsList/NewsList";
 import { TOTAL_PAGES } from "../../constants/constants";
