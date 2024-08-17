@@ -1,3 +1,4 @@
+import { useTheme } from "../../context/ThemeContext";
 import styles from "./styles.module.css";
 
 interface Props {
@@ -6,10 +7,12 @@ interface Props {
   handlePageClick: (page: number) => void;
   handlePrevPage: () => void;
   handleNextPage: () => void;
-  isDark: boolean;
+
 }
 
-const Pagination = ({ totalPages, handlePageClick, handlePrevPage, handleNextPage, currentPage, isDark  }: Props) => {
+const Pagination = ({ totalPages, handlePageClick, handlePrevPage, handleNextPage, currentPage  }: Props) => {
+  const { isDark } = useTheme();
+
   return (
     <div className={`${styles.pagination} ${isDark ? styles.dark : styles.light}`}>
       <button disabled={currentPage <= 1} onClick={handlePrevPage} className={styles.arrow}>{"<"}</button>

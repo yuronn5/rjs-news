@@ -1,13 +1,11 @@
 import { formatDate } from "../../helpers/formatDate";
 import styles from "./styles.module.css";
-import {themeIcons} from "../../assets/index";
+import { themeIcons } from "../../assets/index";
+import { useTheme } from "../../context/ThemeContext";
 
-interface Props {
-  setIsDark: () => void;
-  isDark: boolean;
-}
+const Header = () => {
+  const { isDark, toogleTheme } = useTheme();
 
-const Header = ({ setIsDark, isDark }: Props) => {
   return (
     <header
       className={`${styles.header} ${isDark ? styles.dark : styles.light}`}
@@ -21,7 +19,7 @@ const Header = ({ setIsDark, isDark }: Props) => {
         src={isDark ? themeIcons.light : themeIcons.dark}
         width={30}
         alt="theme"
-        onClick={setIsDark}
+        onClick={toogleTheme}
       />
     </header>
   );
