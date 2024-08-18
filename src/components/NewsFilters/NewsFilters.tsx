@@ -1,7 +1,5 @@
-import { getCategories } from "../../api/apiNews";
 import { useTheme } from "../../context/ThemeContext";
-import { useFetch } from "../../helpers/hooks/useFetch";
-import { CategoriesApiResponse, IFilters } from "../../interfaces";
+import { IFilters } from "../../interfaces";
 import { useGetCategoriesQuery } from "../../store/services/newsApi";
 import Categories from "../Categories/Categories";
 import Search from "../Search/Search";
