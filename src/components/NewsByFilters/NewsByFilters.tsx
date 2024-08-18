@@ -20,16 +20,11 @@ const NewsByFilters = () => {
 
   const debouncedKeywords = useDebounce(filters.keywords, 1500);
 
-  const { data, error, isLoading } = useGetNewsQuery({
+  const { data, isLoading } = useGetNewsQuery({
     ...filters,
     keywords: debouncedKeywords,
   });
   console.log(data);
-  
-  // const { data, isLoading } = useFetch<NewsApiResponse, ParamsType>(getNews, {
-  //   ...filters,
-  //   keywords: debouncedKeywords,
-  // });
 
   const handleNextPage = () => {
     if (filters.page_number < TOTAL_PAGES) {
