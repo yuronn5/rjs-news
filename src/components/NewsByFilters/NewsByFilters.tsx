@@ -11,14 +11,14 @@ import styles from "./styles.module.css";
 const NewsByFilters = () => {
   const dispatch = useAppDispatch();
   const filters = useAppSelector((state) => state.news.filters);
+  const news = useAppSelector((state) => state.news.news);
 
   const debouncedKeywords = useDebounce(filters.keywords, 1500);
 
-  const { data, isLoading } = useGetNewsQuery({
+  const { isLoading } = useGetNewsQuery({
     ...filters,
     keywords: debouncedKeywords,
   });
-  console.log(data);
 
   const handleNextPage = () => {
     if (filters.page_number < TOTAL_PAGES) {
@@ -53,7 +53,7 @@ const NewsByFilters = () => {
         totalPages={TOTAL_PAGES}
         currentPage={filters.page_number}
       >
-        <NewsList isLoading={isLoading} news={data?.news} />
+        <NewsList isLoading={isLoading} news={news} />
       </PaginationWrapper>
     </section>
   );
