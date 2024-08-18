@@ -4,6 +4,7 @@ import { useDebounce } from "../../helpers/hooks/useDebounce";
 import { useFetch } from "../../helpers/hooks/useFetch";
 import { useFilters } from "../../helpers/hooks/useFilters";
 import { NewsApiResponse, ParamsType } from "../../interfaces";
+import { useGetNewsQuery } from "../../store/services/newsApi";
 import NewsFilters from "../NewsFilters/NewsFilters";
 import NewsList from "../NewsList/NewsList";
 import PaginationWrapper from "../PaginationWrapper/PaginationWrapper";
@@ -19,10 +20,16 @@ const NewsByFilters = () => {
 
   const debouncedKeywords = useDebounce(filters.keywords, 1500);
 
-  const { data, isLoading } = useFetch<NewsApiResponse, ParamsType>(getNews, {
+  const { data, error, isLoading } = useGetNewsQuery({
     ...filters,
     keywords: debouncedKeywords,
   });
+  console.log(data);
+  
+  // const { data, isLoading } = useFetch<NewsApiResponse, ParamsType>(getNews, {
+  //   ...filters,
+  //   keywords: debouncedKeywords,
+  // });
 
   const handleNextPage = () => {
     if (filters.page_number < TOTAL_PAGES) {

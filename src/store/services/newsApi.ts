@@ -1,18 +1,34 @@
-// Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { Pokemon } from './types'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { NewsApiResponse, ParamsType } from "../../interfaces";
 
-// Define a service using a base URL and expected endpoints
-export const pokemonApi = createApi({
-  reducerPath: 'pokemonApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+const BASE_URL = import.meta.env.VITE_NEWS_BASE_API_URL;
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
+
+export const newsApi = createApi({
+  reducerPath: "newsApi",
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
-    getPokemonByName: builder.query<Pokemon, string>({
-      query: (name) => `pokemon/${name}`,
+    getNews: builder.query<NewsApiResponse, ParamsType>({
+      query: (params) => {
+        const {
+          page_number = 1,
+          page_size = 10,
+          category,
+          keywords,
+        } = params || {};
+        return {
+          url: "search",
+          params: {
+            apiKey: API_KEY,
+            page_number,
+            page_size,
+            category,
+            keywords,
+          },
+        };
+      },
     }),
   }),
-})
+});
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useGetPokemonByNameQuery } = pokemonApi
+export const { useGetNewsQuery } = newsApi;
