@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "jsx": "react-jsx" // Adding JSX support for React
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
